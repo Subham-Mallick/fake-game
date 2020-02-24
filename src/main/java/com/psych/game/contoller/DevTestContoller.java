@@ -1,4 +1,4 @@
-package com.psych.game;
+package com.psych.game.contoller;
 
 import com.psych.game.model.*;
 import com.psych.game.repositories.GameRepository;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/dev-test")
-public class HelloWorldController {
+public class DevTestContoller {
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -74,6 +74,12 @@ public class HelloWorldController {
                 "What is the most important poneglyph",
                 "Rio Poneglyph",
                 GameMode.IS_THIS_A_FACT));
+
+        questionRepository.save(new Question(
+                "How far can Luffy stretch?",
+                "56 Gomu Gomus",
+                GameMode.IS_THIS_A_FACT
+        ));
 
         return "Populated";
 
