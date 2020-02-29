@@ -1,10 +1,7 @@
 package com.psych.game.contoller;
 
 import com.psych.game.model.*;
-import com.psych.game.repositories.GameRepository;
-import com.psych.game.repositories.PlayerRepository;
-import com.psych.game.repositories.QuestionRepository;
-import com.psych.game.repositories.UserRepository;
+import com.psych.game.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +27,11 @@ public class DevTestContoller {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ContentWriterRepository contentWriterRepository ;
 
+    @Autowired
+    private RoundRepository roundRepository ;
 
     @GetMapping("/")
     public String hello(){
@@ -49,6 +50,7 @@ public class DevTestContoller {
         gameRepository.deleteAll();
         playerRepository.deleteAll();
         questionRepository.deleteAll();
+        contentWriterRepository.deleteAll();
 
         Player luffy = new Player.Builder()
                 .alias("Monkey D. Luffy")
@@ -70,16 +72,42 @@ public class DevTestContoller {
         game.getPlayers().add(luffy);
         gameRepository.save(game);
 
-        questionRepository.save(new Question(
+        Question question_1 =  new Question(
                 "What is the most important poneglyph",
                 "Rio Poneglyph",
-                GameMode.IS_THIS_A_FACT));
+                GameMode.IS_THIS_A_FACT
+        );
 
-        questionRepository.save(new Question(
+        Question question_2 = new Question(
                 "How far can Luffy stretch?",
                 "56 Gomu Gomus",
                 GameMode.IS_THIS_A_FACT
-        ));
+        );
+
+        questionRepository.save(question_1);
+        questionRepository.save(question_2);
+
+        ContentWriter contentWriter_1 = new ContentWriter.ContentWriterBuilder()
+                .address("address_content_writer_1")
+                .email("email_content_writer_1@abc.com")
+                .name("name_content_writer_1")
+                .phoneNumber("phone_number_content_writer_1")
+                .saltedHashedPassword("password_content_writer_1")
+                .build();
+        ContentWriter contentWriter_2 = new ContentWriter.ContentWriterBuilder()
+                .address("address_content_writer_2")
+                .email("email_content_writer_2@abc.com")
+                .name("name_content_writer_2")
+                .phoneNumber("phone_number_content_writer_2")
+                .saltedHashedPassword("password_content_writer_2")
+                .build();
+
+        contentWriterRepository.save(contentWriter_1);
+        contentWriterRepository.save(contentWriter_2);
+
+
+
+
 
         return "Populated";
 
@@ -96,6 +124,8 @@ public class DevTestContoller {
         return questionRepository.findById(id).orElseThrow();
     }
 
+    // PLAYERS
+
     @GetMapping("/players")
     public List<Player> getAllPlayers(){
         return playerRepository.findAll();
@@ -105,6 +135,8 @@ public class DevTestContoller {
     public Player getPlayerById(@PathVariable(name = "id") Long id){
         return playerRepository.findById(id).orElseThrow();
     }
+
+    // USERS
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -116,6 +148,9 @@ public class DevTestContoller {
         return userRepository.findById(id).orElseThrow();
     }
 
+
+    // GAMES
+
     @GetMapping("/games")
     public List<Game> getAllGames() {
         return gameRepository.findAll();
@@ -126,6 +161,30 @@ public class DevTestContoller {
         return gameRepository.findById(id).orElseThrow();
     }
 
-    //Games
-    //players admins questions rounds content writers
+    // Content writer
+
+    @GetMapping("/contentWriters")
+    public List<ContentWriter> getAllContentWriters() {
+        return contentWriterRepository.findAll();
+    }
+
+    @GetMapping("/contentWriter/{id}")
+    public ContentWriter getContentWriterById(@PathVariable(name = "id") Long id) {
+        return contentWriterRepository.findById(id).orElseThrow();
+    }
+
+    // ROUNDS
+
+    @GetMapping("/rounds")
+    public List<Round> getAllRounds() {
+        return roundRepository.findAll();
+    }
+
+    @GetMapping("/round/{id}")
+    public Round getRoundById(@PathVariable(name = "id") Long id) {
+        return roundRepository.findById(id).orElseThrow();
+    }
+
+
+    // admins rounds
 }

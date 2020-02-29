@@ -53,6 +53,10 @@ public class Player extends User {
         setPicURL(builder.picURL);
     }
 
+    public Game getCurrentGame() {
+//        todo
+    }
+
 
     public static final class Builder {
         private @Email @NotBlank String email;
