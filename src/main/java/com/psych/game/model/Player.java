@@ -54,7 +54,8 @@ public class Player extends User {
     }
 
     public Game getCurrentGame() {
-//        todo
+        return null;
+
     }
 
 
